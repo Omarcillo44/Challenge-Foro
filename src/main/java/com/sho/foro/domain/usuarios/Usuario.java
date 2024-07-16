@@ -4,13 +4,20 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "usuarios", schema = "foro", catalog = "")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Usuario {
+public class Usuario implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id_usuario")
@@ -21,6 +28,8 @@ public class Usuario {
     @Basic
     @Column(name = "pass_usuario")
     private String passUsuario;
+
+
 
     public long getIdUsuario() {
         return idUsuario;
@@ -67,5 +76,20 @@ public class Usuario {
         result = 31 * result + (correoUsuario != null ? correoUsuario.hashCode() : 0);
         result = 31 * result + (passUsuario != null ? passUsuario.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+    }
+
+    @Override
+    public String getPassword() {
+        return passUsuario;
+    }
+
+    @Override
+    public String getUsername() {
+        return correoUsuario;
     }
 }

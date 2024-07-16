@@ -1,5 +1,3 @@
-
-
 drop database if exists foro;
 create database foro;
 use foro;

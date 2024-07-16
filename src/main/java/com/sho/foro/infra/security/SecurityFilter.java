@@ -31,11 +31,14 @@ public class SecurityFilter extends OncePerRequestFilter {
             if (nombreUsuario != null) {
                 // Token valido
                 var usuario = usuarioRepository.findByCorreoUsuario(nombreUsuario);
+                System.out.println("Usuario: " + nombreUsuario);
                 var authentication = new UsernamePasswordAuthenticationToken(usuario, null,
                         usuario.getAuthorities()); // Forzamos un inicio de sesion
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+
             }
         }
+        System.out.println(request);
         filterChain.doFilter(request, response);
     }
 }
